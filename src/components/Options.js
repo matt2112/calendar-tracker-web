@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Options = props => {
   return (
@@ -17,6 +19,20 @@ const Options = props => {
         <input
           value={props.maxDays}
           onChange={e => props.onOptionChange("maxDays", e.target.value)}
+        />
+      </div>
+      <div className="option">
+        <p>Start Date</p>
+        <DatePicker
+          selected={props.startDate}
+          onChange={date => props.onOptionChange("startDate", date)}
+        />
+      </div>
+      <div className="option">
+        <p>End Date</p>
+        <DatePicker
+          selected={props.endDate}
+          onChange={date => props.onOptionChange("endDate", date)}
         />
       </div>
     </div>
