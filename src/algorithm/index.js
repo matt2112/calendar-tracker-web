@@ -1,9 +1,9 @@
-const DATA = require("./data");
+// const DATA = require("./data");
 
-const START_DATE = new Date("2017-11-17");
-const END_DATE = new Date();
-const TIME_PERIOD = 5;
-const MAX_DAYS = 4;
+// const START_DATE = new Date("2017-11-17");
+// const END_DATE = new Date();
+// const TIME_PERIOD = 5;
+// const MAX_DAYS = 4;
 // Number of milliseconds in one day.
 const ONE_DAY = 86400000;
 
@@ -30,7 +30,13 @@ function getEndIndex(dates, endDate) {
   return endIndex;
 }
 
-function checkDates(startDate, endDate, dates, timePeriod, maxDays) {
+export default function checkDates(
+  startDate,
+  endDate,
+  dates,
+  timePeriod,
+  maxDays
+) {
   const sortedDates = dates.sort();
   const startindex = getStartIndex(sortedDates, startDate);
   const endIndex = getEndIndex(sortedDates, endDate);
@@ -61,20 +67,20 @@ function checkDates(startDate, endDate, dates, timePeriod, maxDays) {
   return false;
 }
 
-const awayOverMax = checkDates(
-  START_DATE,
-  END_DATE,
-  DATA,
-  TIME_PERIOD,
-  MAX_DAYS
-);
+// const awayOverMax = checkDates(
+//   START_DATE,
+//   END_DATE,
+//   DATA,
+//   TIME_PERIOD,
+//   MAX_DAYS
+// );
 
-if (awayOverMax) {
-  console.log(
-    `Oh dear, you were away for more than ${MAX_DAYS} days in a ${TIME_PERIOD} day period.`
-  );
-} else {
-  console.log(
-    `Well done, you weren't away for more than ${MAX_DAYS} days in a ${TIME_PERIOD} day period.`
-  );
-}
+// if (awayOverMax) {
+//   console.log(
+//     `Oh dear, you were away for more than ${MAX_DAYS} days in a ${TIME_PERIOD} day period.`
+//   );
+// } else {
+//   console.log(
+//     `Well done, you weren't away for more than ${MAX_DAYS} days in a ${TIME_PERIOD} day period.`
+//   );
+// }
