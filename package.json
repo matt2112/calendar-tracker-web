@@ -5,9 +5,11 @@
   "dependencies": {
     "moment": "^2.20.1",
     "react": "^16.2.0",
+    "react-big-calendar": "^0.17.0",
     "react-datepicker": "^1.1.0",
     "react-dom": "^16.2.0",
-    "react-scripts": "1.1.0"
+    "react-scripts": "1.1.0",
+    "react-yearly-calendar": "^1.2.1"
   },
   "scripts": {
     "start": "react-scripts start",

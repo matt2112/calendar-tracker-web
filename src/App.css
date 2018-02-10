@@ -26,6 +26,10 @@
   text-align: right;
 }
 
+.calendar {
+  border-bottom: 1px solid black;
+}
+
 .result {
   box-sizing: border-box;
   padding: 20px;

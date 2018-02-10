@@ -4,17 +4,17 @@ import moment from "moment";
 import "./App.css";
 import Options from "./components/Options";
 import Result from "./components/Result";
+import Calendar from "./components/Calendar";
 import checkDates from "./algorithm";
-import data from "./algorithm/data";
 
 class App extends Component {
   state = {
     awayOverMax: false,
-    data,
     maxDays: 4,
     timePeriod: 5,
-    startDate: moment(),
-    endDate: moment()
+    startDate: moment().subtract(1, "year"),
+    endDate: moment(),
+    datesAway: []
   };
 
   changeOptionValue = (name, value) => {
@@ -38,23 +38,64 @@ class App extends Component {
   };
 
   calculateResult = () => {
+    const datesArray = this.state.datesAway.map(date => date.start);
     const awayOverMax = checkDates(
       this.state.startDate,
       this.state.endDate,
-      data,
+      datesArray,
       this.state.timePeriod,
       this.state.maxDays
     );
-
-    console.log("away over max", awayOverMax);
 
     this.setState(() => ({
       awayOverMax
     }));
   };
 
+  addOrRemoveDate = dateInfo => {
+    const newDatesAway = [...this.state.datesAway];
+    const indiciesToSplice = [];
+    const datesToAdd = [];
+    if (dateInfo.slots) {
+      dateInfo.slots.forEach(date => {
+        const existingDateIdx = this.state.datesAway.findIndex(oldDate => {
+          return oldDate.start.toDateString() === date.toDateString();
+        });
+        if (existingDateIdx === -1) {
+          datesToAdd.push({
+            id: Math.random(),
+            title: "Away",
+            allDay: true,
+            start: date,
+            end: date
+          });
+        } else {
+          indiciesToSplice.push(existingDateIdx);
+        }
+      });
+      // Otherwise single existing event selected.
+    } else {
+      const existingDateIdx = this.state.datesAway.findIndex(oldDate => {
+        return oldDate.start.toDateString() === dateInfo.start.toDateString();
+      });
+      indiciesToSplice.push(existingDateIdx);
+    }
+
+    const updatedDates = newDatesAway.filter(
+      (val, idx) => indiciesToSplice.indexOf(idx) === -1
+    );
+
+    datesToAdd.forEach(date => updatedDates.push(date));
+
+    this.setState(
+      prevState => ({
+        datesAway: updatedDates
+      }),
+      () => this.calculateResult()
+    );
+  };
+
   render() {
-    console.log("RENDER", this.state);
     return (
       <div className="App">
         <h1 className="title">Calendar Tracker</h1>
@@ -64,6 +105,12 @@ class App extends Component {
           startDate={this.state.startDate}
           timePeriod={this.state.timePeriod}
           onOptionChange={this.changeOptionValue}
+        />
+        <Calendar
+          endDate={this.state.endDate}
+          startDate={this.state.startDate}
+          datesAway={this.state.datesAway}
+          onAddOrRemoveDate={this.addOrRemoveDate}
         />
         <Result
           awayOverMax={this.state.awayOverMax}
