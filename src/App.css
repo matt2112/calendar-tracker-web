@@ -28,6 +28,8 @@
 
 .calendar {
   border-bottom: 1px solid black;
+  box-sizing: border-box;
+  padding: 20px;
 }
 
 .result {

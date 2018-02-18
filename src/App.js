@@ -54,7 +54,7 @@ class App extends Component {
 
   addOrRemoveDate = dateInfo => {
     const newDatesAway = [...this.state.datesAway];
-    const indiciesToSplice = [];
+    const indicesToSplice = [];
     const datesToAdd = [];
     if (dateInfo.slots) {
       dateInfo.slots.forEach(date => {
@@ -70,7 +70,7 @@ class App extends Component {
             end: date
           });
         } else {
-          indiciesToSplice.push(existingDateIdx);
+          indicesToSplice.push(existingDateIdx);
         }
       });
       // Otherwise single existing event selected.
@@ -78,11 +78,11 @@ class App extends Component {
       const existingDateIdx = this.state.datesAway.findIndex(oldDate => {
         return oldDate.start.toDateString() === dateInfo.start.toDateString();
       });
-      indiciesToSplice.push(existingDateIdx);
+      indicesToSplice.push(existingDateIdx);
     }
 
     const updatedDates = newDatesAway.filter(
-      (val, idx) => indiciesToSplice.indexOf(idx) === -1
+      (val, idx) => indicesToSplice.indexOf(idx) === -1
     );
 
     datesToAdd.forEach(date => updatedDates.push(date));

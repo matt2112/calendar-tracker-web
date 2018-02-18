@@ -11,7 +11,7 @@ BigCalendar.momentLocalizer(moment);
 const Calendar = props => {
   return (
     <div className="calendar">
-      <h2>Dates Away</h2>
+      <h2 className="sub-heading">Dates Away</h2>
       <BigCalendar
         {...props}
         events={props.datesAway}

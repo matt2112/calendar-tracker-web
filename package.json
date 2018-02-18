@@ -1,7 +1,7 @@
 {
   "name": "calendar-tracker-web",
+  "author": "matt lewis",
   "version": "0.1.0",
-  "private": true,
   "dependencies": {
     "moment": "^2.20.1",
     "react": "^16.2.0",
