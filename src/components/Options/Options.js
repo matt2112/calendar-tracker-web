@@ -1,11 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import DatePicker from "react-datepicker";
+
 import "react-datepicker/dist/react-datepicker.css";
+import "./options.css";
 
 const Options = props => {
   return (
-    <div className="options">
+    <div id="options">
       <h2 className="sub-heading">Options</h2>
       <div className="option">
         <p>Time Period</p>

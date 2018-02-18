@@ -1,10 +1,11 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import moment from "moment";
 
-import "./App.css";
-import Options from "./components/Options";
-import Result from "./components/Result";
-import Calendar from "./components/Calendar";
+import "./app.css";
+import Options from "./components/Options/Options";
+import Result from "./components/Result/Result";
+import Calendar from "./components/Calendar/Calendar";
+import Login from "./components/Login/Login";
 import checkDates from "./algorithm";
 
 class App extends Component {
@@ -14,7 +15,9 @@ class App extends Component {
     timePeriod: 5,
     startDate: moment().subtract(1, "year"),
     endDate: moment(),
-    datesAway: []
+    datesAway: [],
+    signingUp: false,
+    loggedIn: false
   };
 
   changeOptionValue = (name, value) => {
@@ -95,28 +98,51 @@ class App extends Component {
     );
   };
 
+  login = () => {
+    this.setState({
+      loggedIn: true
+    });
+  };
+
+  switchLoginType = () => {
+    this.setState(prevState => ({
+      signingUp: !prevState.signingUp
+    }));
+  };
+
   render() {
     return (
-      <div className="App">
+      <div id="app">
         <h1 className="title">Calendar Tracker</h1>
-        <Options
-          endDate={this.state.endDate}
-          maxDays={this.state.maxDays}
-          startDate={this.state.startDate}
-          timePeriod={this.state.timePeriod}
-          onOptionChange={this.changeOptionValue}
-        />
-        <Calendar
-          endDate={this.state.endDate}
-          startDate={this.state.startDate}
-          datesAway={this.state.datesAway}
-          onAddOrRemoveDate={this.addOrRemoveDate}
-        />
-        <Result
-          awayOverMax={this.state.awayOverMax}
-          maxDays={this.state.maxDays}
-          timePeriod={this.state.timePeriod}
-        />
+        {!this.state.loggedIn && (
+          <Login
+            signingUp={this.state.signingUp}
+            onLogin={this.login}
+            onSwitchLoginType={this.switchLoginType}
+          />
+        )}
+        {this.state.loggedIn && (
+          <Fragment>
+            <Options
+              endDate={this.state.endDate}
+              maxDays={this.state.maxDays}
+              startDate={this.state.startDate}
+              timePeriod={this.state.timePeriod}
+              onOptionChange={this.changeOptionValue}
+            />
+            <Calendar
+              endDate={this.state.endDate}
+              startDate={this.state.startDate}
+              datesAway={this.state.datesAway}
+              onAddOrRemoveDate={this.addOrRemoveDate}
+            />
+            <Result
+              awayOverMax={this.state.awayOverMax}
+              maxDays={this.state.maxDays}
+              timePeriod={this.state.timePeriod}
+            />
+          </Fragment>
+        )}
       </div>
     );
   }

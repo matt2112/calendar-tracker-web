@@ -3,6 +3,7 @@
   "author": "matt lewis",
   "version": "0.1.0",
   "dependencies": {
+    "firebase": "^4.10.0",
     "moment": "^2.20.1",
     "react": "^16.2.0",
     "react-big-calendar": "^0.17.0",

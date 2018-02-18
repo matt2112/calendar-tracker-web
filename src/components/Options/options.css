@@ -1,0 +1,18 @@
+#options {
+  border: 1px solid black;
+  display: flex;
+  flex-flow: column nowrap;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.option {
+  display: flex;
+  flex-flow: row nowrap;
+  margin-bottom: 10px;
+}
+
+.option input {
+  margin-left: 10px;
+  text-align: right;
+}

@@ -1,9 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import "./result.css";
+
 const Result = props => {
   return (
-    <div className="result">
+    <div id="result">
       {props.awayOverMax && (
         <h3>
           Oh dear, you were away for more than {props.maxDays} days in a{" "}

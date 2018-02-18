@@ -4,13 +4,13 @@ import BigCalendar from "react-big-calendar";
 import moment from "moment";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import "./Calendar.css";
+import "./calendar.css";
 
 BigCalendar.momentLocalizer(moment);
 
 const Calendar = props => {
   return (
-    <div className="calendar">
+    <div id="calendar">
       <h2 className="sub-heading">Dates Away</h2>
       <BigCalendar
         {...props}
