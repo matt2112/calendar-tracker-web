@@ -3,6 +3,7 @@
 import React, { Component, Fragment } from 'react';
 import moment, { type Moment } from 'moment';
 
+import firebase from './firebase.js';
 import './app.css';
 import Options from './components/Options/Options';
 import Result from './components/Result/Result';
@@ -34,6 +35,20 @@ class App extends Component<Props, State> {
     loggedIn: false
   };
 
+  componentDidMount() {
+    firebase
+      .database()
+      .ref('numDatesAway')
+      .once('value')
+      .then((snapshot) => {
+        console.log('TEST', snapshot.val());
+        const maxDays = snapshot.val();
+        this.setState(() => ({
+          maxDays
+        }));
+      });
+  }
+
   changeOptionValue = (name: string, value: string) => {
     console.log(value);
     let formattedValue;
@@ -64,9 +79,15 @@ class App extends Component<Props, State> {
       this.state.maxDays
     );
 
-    this.setState(() => ({
-      awayOverMax
-    }));
+    this.setState(
+      () => ({
+        awayOverMax
+      }),
+      () => {
+        const numDatesAwayRef = firebase.database().ref('numDatesAway');
+        numDatesAwayRef.set(this.state.datesAway.length);
+      }
+    );
   };
 
   addOrRemoveDate = (dateInfo: { slots: Array<Moment>, start: Moment }) => {
