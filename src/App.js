@@ -2,13 +2,13 @@
 
 import React, { Component, Fragment } from 'react';
 import moment, { type Moment } from 'moment';
+import FirebaseAuth from 'react-firebaseui/FirebaseAuth';
 
-import firebase from './firebase.js';
+import firebase from './firebaseConfig';
 import './app.css';
 import Options from './components/Options/Options';
 import Result from './components/Result/Result';
 import Calendar from './components/Calendar/Calendar';
-import Login from './components/Login/Login';
 import checkDates from './algorithm';
 
 type Props = {};
@@ -19,7 +19,6 @@ type State = {
   startDate: string,
   endDate: string,
   datesAway: Array<Moment>,
-  signingUp: boolean,
   loggedIn: boolean
 };
 
@@ -31,17 +30,17 @@ class App extends Component<Props, State> {
     startDate: moment().subtract(1, 'year'),
     endDate: moment(),
     datesAway: [],
-    signingUp: false,
     loggedIn: false
   };
 
   componentDidMount() {
+    firebase.auth().onAuthStateChanged(user => this.setState(() => ({ loggedIn: !!user })));
+
     firebase
       .database()
       .ref('numDatesAway')
       .once('value')
       .then((snapshot) => {
-        console.log('TEST', snapshot.val());
         const maxDays = snapshot.val();
         this.setState(() => ({
           maxDays
@@ -49,8 +48,19 @@ class App extends Component<Props, State> {
       });
   }
 
+  uiConfig = {
+    signInFlow: 'popup',
+    signInOptions: [
+      firebase.auth.EmailAuthProvider.PROVIDER_ID,
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID
+    ],
+    callbacks: {
+      // Avoid redirects after sign-in.
+      signInSuccess: () => false
+    }
+  };
+
   changeOptionValue = (name: string, value: string) => {
-    console.log(value);
     let formattedValue;
     if (name === 'maxDays' || name === 'timePeriod') {
       formattedValue = value === '' ? 0 : parseInt(value, 10);
@@ -131,31 +141,17 @@ class App extends Component<Props, State> {
     );
   };
 
-  login = () => {
-    this.setState({
-      loggedIn: true
-    });
-  };
-
-  switchLoginType = () => {
-    this.setState(prevState => ({
-      signingUp: !prevState.signingUp
-    }));
-  };
-
   render() {
     return (
       <div id="app">
         <h1 className="title">Calendar Tracker</h1>
         {!this.state.loggedIn && (
-          <Login
-            signingUp={this.state.signingUp}
-            onLogin={this.login}
-            onSwitchLoginType={this.switchLoginType}
-          />
+          <FirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()} />
         )}
         {this.state.loggedIn && (
           <Fragment>
+            <h2>Welcome {firebase.auth().currentUser.displayName}! You are now signed-in!</h2>
+            <button onClick={() => firebase.auth().signOut()}>Sign-out</button>
             <Options
               endDate={this.state.endDate}
               maxDays={this.state.maxDays}
