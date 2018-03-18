@@ -35,17 +35,23 @@ class App extends Component<Props, State> {
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => this.setState(() => ({ loggedIn: !!user })));
+  }
 
-    firebase
-      .database()
-      .ref('numDatesAway')
-      .once('value')
-      .then((snapshot) => {
-        const maxDays = snapshot.val();
-        this.setState(() => ({
-          maxDays
-        }));
-      });
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    if (!prevState.loggedIn && this.state.loggedIn) {
+      const userId = firebase.auth().currentUser.uid;
+
+      firebase
+        .database()
+        .ref(`/users/${userId}/numDatesAway`)
+        .once('value')
+        .then((snapshot) => {
+          const maxDays = snapshot.val();
+          this.setState(() => ({
+            maxDays
+          }));
+        });
+    }
   }
 
   uiConfig = {
@@ -94,8 +100,11 @@ class App extends Component<Props, State> {
         awayOverMax
       }),
       () => {
-        const numDatesAwayRef = firebase.database().ref('numDatesAway');
-        numDatesAwayRef.set(this.state.datesAway.length);
+        const userId = firebase.auth().currentUser.uid;
+        firebase
+          .database()
+          .ref(`/users/${userId}/numDatesAway`)
+          .set(this.state.datesAway.length);
       }
     );
   };
