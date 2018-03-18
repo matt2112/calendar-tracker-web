@@ -1,49 +1,49 @@
-import React from "react";
-import PropTypes from "prop-types";
-import DatePicker from "react-datepicker";
+import React from 'react';
+import PropTypes from 'prop-types';
+import DatePicker from 'react-datepicker';
 
-import "react-datepicker/dist/react-datepicker.css";
-import "./options.css";
+import 'react-datepicker/dist/react-datepicker.css';
+import './options.css';
 
-const Options = props => {
-  return (
-    <div id="options">
-      <h2 className="sub-heading">Options</h2>
-      <div className="option">
-        <p>Time Period</p>
-        <input
-          value={props.timePeriod}
-          onChange={e => props.onOptionChange("timePeriod", e.target.value)}
-        />
-      </div>
-      <div className="option">
-        <p>Maximum Days out of Country</p>
-        <input
-          value={props.maxDays}
-          onChange={e => props.onOptionChange("maxDays", e.target.value)}
-        />
-      </div>
-      <div className="option">
-        <p>Start Date</p>
-        <DatePicker
-          selected={props.startDate}
-          onChange={date => props.onOptionChange("startDate", date)}
-        />
-      </div>
-      <div className="option">
-        <p>End Date</p>
-        <DatePicker
-          selected={props.endDate}
-          onChange={date => props.onOptionChange("endDate", date)}
-        />
-      </div>
+const Options = ({
+  endDate, maxDays, onOptionChange, onSave, startDate, timePeriod
+}) => (
+  <div id="options">
+    <h2 className="sub-heading">Options</h2>
+    <div className="option">
+      <p>Time Period</p>
+      <input value={timePeriod} onChange={e => onOptionChange('timePeriod', e.target.value)} />
     </div>
-  );
-};
+    <div className="option">
+      <p>Maximum Days out of Country</p>
+      <input value={maxDays} onChange={e => onOptionChange('maxDays', e.target.value)} />
+    </div>
+    <div className="option">
+      <p>Start Date</p>
+      <DatePicker
+        selected={startDate}
+        dateFormat="DD-MM-YYYY"
+        onChange={date => onOptionChange('startDate', date)}
+      />
+    </div>
+    <div className="option">
+      <p>End Date</p>
+      <DatePicker
+        selected={endDate}
+        dateFormat="DD-MM-YYYY"
+        onChange={date => onOptionChange('endDate', date)}
+      />
+    </div>
+    <button onClick={onSave}>Save Options</button>
+  </div>
+);
 
 Options.propTypes = {
+  endDate: PropTypes.string.isRequired,
   maxDays: PropTypes.number.isRequired,
   onOptionChange: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
+  startDate: PropTypes.string.isRequired,
   timePeriod: PropTypes.number.isRequired
 };
 

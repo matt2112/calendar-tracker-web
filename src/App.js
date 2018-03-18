@@ -14,23 +14,27 @@ import checkDates from './algorithm';
 type Props = {};
 type State = {
   awayOverMax: boolean,
-  maxDays: number,
-  timePeriod: number,
-  startDate: string,
-  endDate: string,
   datesAway: Array<Moment>,
-  loggedIn: boolean
+  loggedIn: boolean,
+  options: {
+    maxDays: number,
+    timePeriod: number,
+    startDate: string,
+    endDate: string
+  }
 };
 
 class App extends Component<Props, State> {
   state = {
     awayOverMax: false,
-    maxDays: 4,
-    timePeriod: 5,
-    startDate: moment().subtract(1, 'year'),
-    endDate: moment(),
     datesAway: [],
-    loggedIn: false
+    loggedIn: false,
+    options: {
+      maxDays: 4,
+      timePeriod: 5,
+      startDate: moment().subtract(1, 'year'),
+      endDate: moment()
+    }
   };
 
   componentDidMount() {
@@ -43,13 +47,40 @@ class App extends Component<Props, State> {
 
       firebase
         .database()
-        .ref(`/users/${userId}/numDatesAway`)
+        .ref(`/users/${userId}/options`)
         .once('value')
         .then((snapshot) => {
-          const maxDays = snapshot.val();
-          this.setState(() => ({
-            maxDays
-          }));
+          const options = snapshot.val();
+          if (options) {
+            this.setState({
+              options: {
+                maxDays: options.maxDays,
+                timePeriod: options.timePeriod,
+                startDate: moment(options.startDate),
+                endDate: moment(options.endDate)
+              }
+            });
+          }
+        });
+
+      firebase
+        .database()
+        .ref(`/users/${userId}/datesAway`)
+        .once('value')
+        .then((snapshot) => {
+          const datesAway = snapshot.val();
+          if (datesAway) {
+            this.setState({
+              datesAway: datesAway.map(date => ({
+                allDay: date.allDay,
+                // React Big Calendar can't seem to process dates as moment objects.
+                end: new Date(date.end),
+                id: date.id,
+                start: new Date(date.start),
+                title: date.title
+              }))
+            });
+          }
         });
     }
   }
@@ -76,8 +107,11 @@ class App extends Component<Props, State> {
     }
 
     this.setState(
-      () => ({
-        [name]: formattedValue
+      prevState => ({
+        options: {
+          ...prevState.options,
+          [name]: formattedValue
+        }
       }),
       () => {
         this.calculateResult();
@@ -88,24 +122,18 @@ class App extends Component<Props, State> {
   calculateResult = () => {
     const datesArray = this.state.datesAway.map(date => date.start);
     const awayOverMax = checkDates(
-      this.state.startDate,
-      this.state.endDate,
+      this.state.options.startDate,
+      this.state.options.endDate,
       datesArray,
-      this.state.timePeriod,
-      this.state.maxDays
+      this.state.options.timePeriod,
+      this.state.options.maxDays
     );
 
     this.setState(
       () => ({
         awayOverMax
       }),
-      () => {
-        const userId = firebase.auth().currentUser.uid;
-        firebase
-          .database()
-          .ref(`/users/${userId}/numDatesAway`)
-          .set(this.state.datesAway.length);
-      }
+      () => {}
     );
   };
 
@@ -150,7 +178,43 @@ class App extends Component<Props, State> {
     );
   };
 
+  saveOptions = () => {
+    const userId = firebase.auth().currentUser.uid;
+    const { options } = this.state;
+    const optionsToSave = {
+      maxDays: options.maxDays,
+      timePeriod: options.timePeriod,
+      startDate: options.startDate.format(),
+      endDate: options.endDate.format()
+    };
+
+    firebase
+      .database()
+      .ref(`/users/${userId}/options`)
+      .set(optionsToSave);
+  };
+
+  saveDates = () => {
+    const userId = firebase.auth().currentUser.uid;
+    const datesToSave = this.state.datesAway.map(date => ({
+      allDay: date.allDay,
+      end: moment(date.end).format(),
+      id: date.id,
+      start: moment(date.start).format(),
+      title: date.title
+    }));
+
+    firebase
+      .database()
+      .ref(`/users/${userId}/datesAway`)
+      .set(datesToSave);
+  };
+
   render() {
+    const {
+      endDate, maxDays, startDate, timePeriod
+    } = this.state.options;
+
     return (
       <div id="app">
         <h1 className="title">Calendar Tracker</h1>
@@ -159,25 +223,29 @@ class App extends Component<Props, State> {
         )}
         {this.state.loggedIn && (
           <Fragment>
-            <h2>Welcome {firebase.auth().currentUser.displayName}! You are now signed-in!</h2>
-            <button onClick={() => firebase.auth().signOut()}>Sign-out</button>
+            <div id="welcome">
+              <h2>Welcome {firebase.auth().currentUser.displayName}!</h2>
+              <button onClick={() => firebase.auth().signOut()}>Sign-out</button>
+            </div>
             <Options
-              endDate={this.state.endDate}
-              maxDays={this.state.maxDays}
-              startDate={this.state.startDate}
-              timePeriod={this.state.timePeriod}
+              endDate={endDate}
+              maxDays={maxDays}
               onOptionChange={this.changeOptionValue}
+              onSave={this.saveOptions}
+              startDate={startDate}
+              timePeriod={timePeriod}
             />
             <Calendar
-              endDate={this.state.endDate}
-              startDate={this.state.startDate}
+              endDate={endDate}
+              onSave={this.saveDates}
+              startDate={startDate}
               datesAway={this.state.datesAway}
               onAddOrRemoveDate={this.addOrRemoveDate}
             />
             <Result
               awayOverMax={this.state.awayOverMax}
-              maxDays={this.state.maxDays}
-              timePeriod={this.state.timePeriod}
+              maxDays={maxDays}
+              timePeriod={timePeriod}
             />
           </Fragment>
         )}
