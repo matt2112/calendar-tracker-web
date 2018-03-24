@@ -10,6 +10,7 @@ import Options from './components/Options/Options';
 import Result from './components/Result/Result';
 import Calendar from './components/Calendar/Calendar';
 import checkDates from './algorithm';
+import { ABROAD, TRAVELLING } from './constants';
 
 type Props = {};
 type State = {
@@ -23,9 +24,6 @@ type State = {
     endDate: string
   }
 };
-
-const ABROAD = 'Abroad';
-const TRAVELLING = 'Travelling';
 
 class App extends Component<Props, State> {
   state = {
