@@ -24,6 +24,9 @@ type State = {
   }
 };
 
+const ABROAD = 'Abroad';
+const TRAVELLING = 'Travelling';
+
 class App extends Component<Props, State> {
   state = {
     awayOverMax: false,
@@ -120,7 +123,9 @@ class App extends Component<Props, State> {
   };
 
   calculateResult = () => {
-    const datesArray = this.state.datesAway.map(date => date.start);
+    const datesArray = this.state.datesAway
+      .filter(date => date.title === ABROAD)
+      .map(date => date.start);
     const awayOverMax = checkDates(
       this.state.options.startDate,
       this.state.options.endDate,
@@ -149,7 +154,16 @@ class App extends Component<Props, State> {
         if (existingDateIdx === -1) {
           datesToAdd.push({
             id: Math.random(),
-            title: 'Away',
+            title: ABROAD,
+            allDay: true,
+            start: date,
+            end: date
+          });
+        } else if (this.state.datesAway[existingDateIdx].title === ABROAD) {
+          indicesToSplice.push(existingDateIdx);
+          datesToAdd.push({
+            id: Math.random(),
+            title: TRAVELLING,
             allDay: true,
             start: date,
             end: date
@@ -163,6 +177,15 @@ class App extends Component<Props, State> {
       const existingDateIdx = this.state.datesAway.findIndex(
         oldDate => oldDate.start.toDateString() === dateInfo.start.toDateString()
       );
+      if (dateInfo.title === ABROAD) {
+        datesToAdd.push({
+          id: Math.random(),
+          title: TRAVELLING,
+          allDay: true,
+          start: dateInfo.start,
+          end: dateInfo.end
+        });
+      }
       indicesToSplice.push(existingDateIdx);
     }
 

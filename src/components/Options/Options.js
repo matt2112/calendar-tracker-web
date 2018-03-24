@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-datepicker';
+import { momentObj } from 'react-moment-proptypes';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import './options.css';
@@ -39,11 +40,11 @@ const Options = ({
 );
 
 Options.propTypes = {
-  endDate: PropTypes.string.isRequired,
+  endDate: momentObj.isRequired,
   maxDays: PropTypes.number.isRequired,
   onOptionChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
-  startDate: PropTypes.string.isRequired,
+  startDate: momentObj.isRequired,
   timePeriod: PropTypes.number.isRequired
 };
 
