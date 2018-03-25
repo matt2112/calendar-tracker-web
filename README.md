@@ -6,9 +6,9 @@ The app was initially set up using [create-react-app](https://github.com/faceboo
 
 ### TODO
 
-* Add ability to differentiate between days abroad and days travelling, and update algorithm accordingly.
-* Set up Travis CI.
+* Add ability to view away periods as a list, and export data to csv.
 * Write tests.
-* Ensure Flow coverage at 100%.
+* Set up Travis CI.
+* Ensure Flow coverage as close to 100% as possible.
 * Make it look pretty, and improve responsiveness.
 * Possibly use React Router, though not a necessity.

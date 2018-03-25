@@ -35,12 +35,12 @@ export default (
   dates: Array<Date>,
   timePeriod: number,
   maxDays: number
-): boolean => {
+): [boolean, number] => {
   const sortedDates = dates.concat().sort((a, b) => a.getTime() - b.getTime());
   const startIndex = getStartIndex(sortedDates, startDate);
   const endIndex = getEndIndex(sortedDates, endDate);
   if (endIndex === -1) {
-    return false;
+    return [false, 0];
   }
   const relevantDates = sortedDates.slice(startIndex, endIndex + 1);
   const timePeriodInMs = ONE_DAY * timePeriod;
@@ -62,9 +62,9 @@ export default (
         }
       }
       if (numberOfDaysAwayInPeriod > maxDays) {
-        return true;
+        return [true, numberOfDaysAwayInPeriod];
       }
     }
   }
-  return false;
+  return [false, 0];
 };

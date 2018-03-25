@@ -14,7 +14,7 @@ import { ABROAD, TRAVELLING } from './constants';
 
 type Props = {};
 type State = {
-  awayOverMax: boolean,
+  awayOverMax: [boolean, number],
   datesAway: Array<Moment>,
   loggedIn: boolean,
   options: {
@@ -27,7 +27,7 @@ type State = {
 
 class App extends Component<Props, State> {
   state = {
-    awayOverMax: false,
+    awayOverMax: [false, 0],
     datesAway: [],
     loggedIn: false,
     options: {
