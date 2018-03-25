@@ -20,8 +20,8 @@ type State = {
   options: {
     maxDays: number,
     timePeriod: number,
-    startDate: string,
-    endDate: string
+    startDate: moment,
+    endDate: moment
   }
 };
 
@@ -80,7 +80,7 @@ class App extends Component<Props, State> {
                 start: new Date(date.start),
                 title: date.title
               }))
-            });
+            }, () => this.calculateResult());
           }
         });
     }

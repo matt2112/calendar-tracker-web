@@ -1,48 +1,50 @@
-// const DATA = require("./data");
+// @flow
 
-// const START_DATE = new Date("2017-11-17");
-// const END_DATE = new Date();
-// const TIME_PERIOD = 5;
-// const MAX_DAYS = 4;
+import { type Moment } from 'moment';
+
 // Number of milliseconds in one day.
 const ONE_DAY = 86400000;
 
-function getStartIndex(dates, startDate) {
-  const startDateInMs = new Date(startDate).getTime();
-  const startIndex = dates.findIndex((date, idx) => {
-    const dateInMs = new Date(date).getTime();
+const getStartIndex = (dates: Array<Date>, startDate: Moment): number => {
+  const startDateInMs = startDate.valueOf();
+  const startIndex = dates.findIndex((date) => {
+    const dateInMs = date.getTime();
     return dateInMs >= startDateInMs;
   });
   return startIndex;
-}
+};
 
-function getEndIndex(dates, endDate) {
-  const endDateInMs = new Date(endDate).getTime();
-  let endIndex;
-  for (let i = dates.length - 1; i >= 0; i--) {
+const getEndIndex = (dates: Array<Date>, endDate: Moment): number => {
+  const endDateInMs = endDate.valueOf();
+  let endIndex = -1;
+  for (let i = dates.length - 1; i >= 0; i -= 1) {
     const date = dates[i];
-    const dateInMs = new Date(date).getTime();
+    const dateInMs = date.getTime();
     if (dateInMs <= endDateInMs) {
       endIndex = i;
       break;
     }
   }
   return endIndex;
-}
+};
 
-export default function checkDates(
-  startDate,
-  endDate,
-  dates,
-  timePeriod,
-  maxDays
-) {
-  const sortedDates = dates.sort();
-  const startindex = getStartIndex(sortedDates, startDate);
+// Returns true if away over maximum time period.
+export default (
+  startDate: Moment,
+  endDate: Moment,
+  dates: Array<Date>,
+  timePeriod: number,
+  maxDays: number
+): boolean => {
+  const sortedDates = dates.concat().sort((a, b) => a.getTime() - b.getTime());
+  const startIndex = getStartIndex(sortedDates, startDate);
   const endIndex = getEndIndex(sortedDates, endDate);
-  const relevantDates = sortedDates.slice(startindex, endIndex + 1);
+  if (endIndex === -1) {
+    return false;
+  }
+  const relevantDates = sortedDates.slice(startIndex, endIndex + 1);
   const timePeriodInMs = ONE_DAY * timePeriod;
-  for (let i = 0; i < relevantDates.length; i++) {
+  for (let i = 0; i < relevantDates.length; i += 1) {
     const datesToCheck = relevantDates.slice(i);
     let numberOfDaysAwayInPeriod = 0;
     if (datesToCheck.length < maxDays) {
@@ -50,11 +52,11 @@ export default function checkDates(
       break;
     } else {
       const firstDay = new Date(datesToCheck[0]).getTime();
-      for (let j = 0; j < datesToCheck.length; j++) {
+      for (let j = 0; j < datesToCheck.length; j += 1) {
         const nextDay = new Date(datesToCheck[j]).getTime();
         const difference = nextDay - firstDay;
-        if (difference <= timePeriodInMs) {
-          numberOfDaysAwayInPeriod++;
+        if (difference + ONE_DAY <= timePeriodInMs) {
+          numberOfDaysAwayInPeriod += 1;
         } else {
           break;
         }
@@ -65,22 +67,4 @@ export default function checkDates(
     }
   }
   return false;
-}
-
-// const awayOverMax = checkDates(
-//   START_DATE,
-//   END_DATE,
-//   DATA,
-//   TIME_PERIOD,
-//   MAX_DAYS
-// );
-
-// if (awayOverMax) {
-//   console.log(
-//     `Oh dear, you were away for more than ${MAX_DAYS} days in a ${TIME_PERIOD} day period.`
-//   );
-// } else {
-//   console.log(
-//     `Well done, you weren't away for more than ${MAX_DAYS} days in a ${TIME_PERIOD} day period.`
-//   );
-// }
+};
