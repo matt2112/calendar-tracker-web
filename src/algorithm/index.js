@@ -16,16 +16,8 @@ const getStartIndex = (dates: Array<Date>, startDate: Moment): number => {
 
 const getEndIndex = (dates: Array<Date>, endDate: Moment): number => {
   const endDateInMs = endDate.valueOf();
-  let endIndex = -1;
-  for (let i = dates.length - 1; i >= 0; i -= 1) {
-    const date = dates[i];
-    const dateInMs = date.getTime();
-    if (dateInMs <= endDateInMs) {
-      endIndex = i;
-      break;
-    }
-  }
-  return endIndex;
+  dates.reverse();
+  return dates.findIndex(date => date.getTime() <= endDateInMs);
 };
 
 // Returns true if away over maximum time period.
