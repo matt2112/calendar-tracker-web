@@ -7,6 +7,7 @@ import FirebaseAuth from 'react-firebaseui/FirebaseAuth';
 
 import firebase from './firebaseConfig';
 import './app.css';
+import NavBar from './components/NavBar/NavBar';
 import Options from './components/Options/Options';
 import Result from './components/Result/Result';
 import Calendar from './components/Calendar/Calendar';
@@ -239,15 +240,17 @@ class App extends Component<Props, State> {
 
     return (
       <div id="app">
-        <h1 className="title">Calendar Tracker</h1>
         {!this.state.loggedIn && (
-          <FirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()} />
+          <Fragment>
+            <h1 className="title">Calendar Tracker</h1>
+            <FirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()} />
+          </Fragment>
         )}
         {this.state.loggedIn && (
           <Fragment>
             <div id="welcome">
+              <NavBar />
               <h2>Welcome {firebase.auth().currentUser.displayName}!</h2>
-              <button onClick={() => firebase.auth().signOut()}>Sign-out</button>
             </div>
             <Switch>
               <Route

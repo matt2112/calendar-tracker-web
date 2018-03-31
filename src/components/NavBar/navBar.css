@@ -1,0 +1,32 @@
+#navBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  background-color: red;
+  height: 50px;
+}
+
+.left {
+  display: flex;
+  align-items: stretch;
+  width: 30%;
+  justify-content: space-around;
+}
+
+.right {
+  display: flex;
+  align-items: stretch;
+}
+
+.link {
+  background-color: green;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  text-decoration: none;
+}
+
+.active {
+  background-color: blue;
+}
