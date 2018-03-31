@@ -21,7 +21,8 @@ const Result = props => (
 );
 
 Result.propTypes = {
-  awayOverMax: PropTypes.arrayOf(PropTypes.boolean, PropTypes.number).isRequired,
+  awayOverMax: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.bool, PropTypes.number]))
+    .isRequired,
   maxDays: PropTypes.number.isRequired,
   timePeriod: PropTypes.number.isRequired
 };

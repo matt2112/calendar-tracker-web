@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
+import { Switch, Route } from 'react-router-dom';
 import moment, { type Moment } from 'moment';
 import FirebaseAuth from 'react-firebaseui/FirebaseAuth';
 
@@ -71,16 +72,19 @@ class App extends Component<Props, State> {
         .then((snapshot) => {
           const datesAway = snapshot.val();
           if (datesAway) {
-            this.setState({
-              datesAway: datesAway.map(date => ({
-                allDay: date.allDay,
-                // React Big Calendar can't seem to process dates as moment objects.
-                end: new Date(date.end),
-                id: date.id,
-                start: new Date(date.start),
-                title: date.title
-              }))
-            }, () => this.calculateResult());
+            this.setState(
+              {
+                datesAway: datesAway.map(date => ({
+                  allDay: date.allDay,
+                  // React Big Calendar can't seem to process dates as moment objects.
+                  end: new Date(date.end),
+                  id: date.id,
+                  start: new Date(date.start),
+                  title: date.title
+                }))
+              },
+              () => this.calculateResult()
+            );
           }
         });
     }
@@ -92,10 +96,7 @@ class App extends Component<Props, State> {
       firebase.auth.EmailAuthProvider.PROVIDER_ID,
       firebase.auth.GoogleAuthProvider.PROVIDER_ID
     ],
-    callbacks: {
-      // Avoid redirects after sign-in.
-      signInSuccess: () => false
-    }
+    signInSuccessUrl: '/calendar'
   };
 
   changeOptionValue = (name: string, value: string) => {
@@ -248,26 +249,40 @@ class App extends Component<Props, State> {
               <h2>Welcome {firebase.auth().currentUser.displayName}!</h2>
               <button onClick={() => firebase.auth().signOut()}>Sign-out</button>
             </div>
-            <Options
-              endDate={endDate}
-              maxDays={maxDays}
-              onOptionChange={this.changeOptionValue}
-              onSave={this.saveOptions}
-              startDate={startDate}
-              timePeriod={timePeriod}
-            />
-            <Calendar
-              endDate={endDate}
-              onSave={this.saveDates}
-              startDate={startDate}
-              datesAway={this.state.datesAway}
-              onAddOrRemoveDate={this.addOrRemoveDate}
-            />
-            <Result
-              awayOverMax={this.state.awayOverMax}
-              maxDays={maxDays}
-              timePeriod={timePeriod}
-            />
+            <Switch>
+              <Route
+                path="/calendar"
+                render={() => (
+                  <Fragment>
+                    <Calendar
+                      endDate={endDate}
+                      onSave={this.saveDates}
+                      startDate={startDate}
+                      datesAway={this.state.datesAway}
+                      onAddOrRemoveDate={this.addOrRemoveDate}
+                    />
+                    <Result
+                      awayOverMax={this.state.awayOverMax}
+                      maxDays={maxDays}
+                      timePeriod={timePeriod}
+                    />
+                  </Fragment>
+                )}
+              />
+              <Route
+                path="/options"
+                render={() => (
+                  <Options
+                    endDate={endDate}
+                    maxDays={maxDays}
+                    onOptionChange={this.changeOptionValue}
+                    onSave={this.saveOptions}
+                    startDate={startDate}
+                    timePeriod={timePeriod}
+                  />
+                )}
+              />
+            </Switch>
           </Fragment>
         )}
       </div>
