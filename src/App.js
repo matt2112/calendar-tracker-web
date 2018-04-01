@@ -11,6 +11,7 @@ import NavBar from './components/NavBar/NavBar';
 import Options from './components/Options/Options';
 import Result from './components/Result/Result';
 import Calendar from './components/Calendar/Calendar';
+import Table from './components/Table/Table';
 import checkDates from './algorithm';
 import { ABROAD, TRAVELLING } from './constants';
 
@@ -270,6 +271,12 @@ class App extends Component<Props, State> {
                       timePeriod={timePeriod}
                     />
                   </Fragment>
+                )}
+              />
+              <Route
+                path="/table"
+                render={() => (
+                  <Table />
                 )}
               />
               <Route
