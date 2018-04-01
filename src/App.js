@@ -18,13 +18,19 @@ import { ABROAD, TRAVELLING } from './constants';
 type Props = {};
 type State = {
   awayOverMax: [boolean, number],
-  datesAway: Array<Moment>,
+  datesAway: Array<{
+    allDay: boolean,
+    end: Date,
+    id: number,
+    start: Date,
+    title: string
+  }>,
   loggedIn: boolean,
   options: {
     maxDays: number,
     timePeriod: number,
-    startDate: moment,
-    endDate: moment
+    startDate: Moment,
+    endDate: Moment
   }
 };
 
@@ -276,7 +282,7 @@ class App extends Component<Props, State> {
               <Route
                 path="/table"
                 render={() => (
-                  <Table />
+                  <Table datesAway={this.state.datesAway} options={this.state.options} />
                 )}
               />
               <Route
