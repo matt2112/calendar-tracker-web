@@ -16,6 +16,7 @@
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "react-big-calendar": "^0.18.0",
+    "react-csv": "^1.0.14",
     "react-datepicker": "^1.2.2",
     "react-dom": "^16.2.0",
     "react-firebaseui": "^1.1.9",

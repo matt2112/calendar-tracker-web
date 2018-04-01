@@ -1,10 +1,12 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { AutoSizer, Column, Table as RVTable } from 'react-virtualized';
 import 'react-virtualized/styles.css';
 import moment from 'moment';
+import { CSVLink } from 'react-csv';
 
+import './Table.css';
 import { ABROAD, TRAVELLING } from '../../constants';
 
 type Props = {
@@ -82,22 +84,37 @@ class Table extends Component<Props, State> {
   render() {
     const { allDates } = this.state;
     return (
-      <AutoSizer>
-        {({ height, width }) => (
-          <RVTable
-            width={width}
-            height={height}
-            headerHeight={20}
-            rowHeight={30}
-            rowCount={allDates.length}
-            rowGetter={({ index }) => allDates[index]}
-          >
-            <Column label="Departure" dataKey="departure" width={0} flexGrow={1} />
-            <Column label="Return" dataKey="return" width={0} flexGrow={1} />
-            <Column label="Number of Days Away" dataKey="away" width={0} flexGrow={1} />
-          </RVTable>
+      <Fragment>
+        {allDates.length > 0 && (
+          <Fragment>
+            <CSVLink
+              data={allDates}
+              filename="all-dates.csv"
+              target="_blank"
+              className="download-button"
+            >
+              Download Data
+            </CSVLink>
+            <p>(if using an AdBlocker, right click link above and choose Save Link As...)</p>
+          </Fragment>
         )}
-      </AutoSizer>
+        <AutoSizer>
+          {({ height, width }) => (
+            <RVTable
+              width={width}
+              height={height}
+              headerHeight={20}
+              rowHeight={30}
+              rowCount={allDates.length}
+              rowGetter={({ index }) => allDates[index]}
+            >
+              <Column label="Departure" dataKey="departure" width={0} flexGrow={1} />
+              <Column label="Return" dataKey="return" width={0} flexGrow={1} />
+              <Column label="Number of Days Away" dataKey="away" width={0} flexGrow={1} />
+            </RVTable>
+          )}
+        </AutoSizer>
+      </Fragment>
     );
   }
 }
