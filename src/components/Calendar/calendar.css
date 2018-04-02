@@ -3,8 +3,26 @@
   min-height: 580px;
 }
 
-#calendar {
-  border-bottom: 1px solid black;
-  box-sizing: border-box;
-  padding: 20px;
+#top {
+  display: flex;
+  justify-content: space-between;
+}
+
+#saveDates {
+  align-self: stretch;
+  width: 100px;
+  font-size: 1rem;
+  text-decoration: none;
+  text-align: center;
+  padding: 10px;
+  background-color: #777;
+  color: #fff;
+  border-radius: 5px;
+  border: 1px solid #000;
+  cursor: pointer;
+  outline: none;
+}
+
+#saveDates:active {
+  background-color: rgb(145, 46, 46);
 }

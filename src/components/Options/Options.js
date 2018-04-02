@@ -10,7 +10,6 @@ const Options = ({
   endDate, maxDays, onOptionChange, onSave, startDate, timePeriod
 }) => (
   <div id="options">
-    <h2 className="sub-heading">Options</h2>
     <div className="option">
       <p>Time Period</p>
       <input value={timePeriod} onChange={e => onOptionChange('timePeriod', e.target.value)} />
@@ -35,7 +34,9 @@ const Options = ({
         onChange={date => onOptionChange('endDate', date)}
       />
     </div>
-    <button onClick={onSave}>Save Options</button>
+    <button id="saveOptions" onClick={onSave}>
+      Save Options
+    </button>
   </div>
 );
 

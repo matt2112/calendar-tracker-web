@@ -9,7 +9,6 @@ import firebase from './firebaseConfig';
 import './app.css';
 import NavBar from './components/NavBar/NavBar';
 import Options from './components/Options/Options';
-import Result from './components/Result/Result';
 import Calendar from './components/Calendar/Calendar';
 import Table from './components/Table/Table';
 import checkDates from './algorithm';
@@ -256,47 +255,45 @@ class App extends Component<Props, State> {
         {this.state.loggedIn && (
           <Fragment>
             <NavBar />
-            <Switch>
-              <Route
-                exact
-                path="/"
-                render={() => (
-                  <Fragment>
+            <div id="container">
+              <Switch>
+                <Route
+                  exact
+                  path="/"
+                  render={() => (
                     <Calendar
+                      awayOverMax={this.state.awayOverMax}
+                      datesAway={this.state.datesAway}
                       endDate={endDate}
+                      maxDays={maxDays}
+                      onAddOrRemoveDate={this.addOrRemoveDate}
                       onSave={this.saveDates}
                       startDate={startDate}
-                      datesAway={this.state.datesAway}
-                      onAddOrRemoveDate={this.addOrRemoveDate}
-                    />
-                    <Result
-                      awayOverMax={this.state.awayOverMax}
-                      maxDays={maxDays}
                       timePeriod={timePeriod}
                     />
-                  </Fragment>
-                )}
-              />
-              <Route
-                path="/table"
-                render={() => (
-                  <Table datesAway={this.state.datesAway} options={this.state.options} />
-                )}
-              />
-              <Route
-                path="/options"
-                render={() => (
-                  <Options
-                    endDate={endDate}
-                    maxDays={maxDays}
-                    onOptionChange={this.changeOptionValue}
-                    onSave={this.saveOptions}
-                    startDate={startDate}
-                    timePeriod={timePeriod}
-                  />
-                )}
-              />
-            </Switch>
+                  )}
+                />
+                <Route
+                  path="/table"
+                  render={() => (
+                    <Table datesAway={this.state.datesAway} options={this.state.options} />
+                  )}
+                />
+                <Route
+                  path="/options"
+                  render={() => (
+                    <Options
+                      endDate={endDate}
+                      maxDays={maxDays}
+                      onOptionChange={this.changeOptionValue}
+                      onSave={this.saveOptions}
+                      startDate={startDate}
+                      timePeriod={timePeriod}
+                    />
+                  )}
+                />
+              </Switch>
+            </div>
           </Fragment>
         )}
       </div>

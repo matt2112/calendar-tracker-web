@@ -6,9 +6,7 @@ The app was initially set up using [create-react-app](https://github.com/faceboo
 
 ### TODO
 
-* Add ability to view away periods as a list, and export data to csv.
-* Write tests.
+* Write tests (!)
 * Set up Travis CI.
 * Ensure Flow coverage as close to 100% as possible.
-* Make it look pretty, and improve responsiveness.
-* Possibly use React Router, though not a necessity.
+* Improve responsiveness and styling.

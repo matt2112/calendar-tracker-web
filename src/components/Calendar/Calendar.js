@@ -21,7 +21,26 @@ const eventStyleGetter = (event) => {
 
 const Calendar = props => (
   <div id="calendar">
-    <h2 className="sub-heading">Dates Away</h2>
+    <div id="top">
+      <h2 className="sub-heading">Dates Away</h2>
+      <button id="saveDates" onClick={props.onSave}>
+        Save Dates
+      </button>
+    </div>
+    <div id="result">
+      {props.awayOverMax[0] && (
+        <h3>
+          Oh dear, you were away for {props.awayOverMax[1]} days in a {props.timePeriod} day period,
+          but the maximum is {props.maxDays}.
+        </h3>
+      )}
+      {!props.awayOverMax[0] && (
+        <h3>
+          Well done, you weren&apos;t away for more than {props.maxDays} days in a{' '}
+          {props.timePeriod} day period.
+        </h3>
+      )}
+    </div>
     <BigCalendar
       {...props}
       events={props.datesAway}
@@ -34,11 +53,12 @@ const Calendar = props => (
       onSelectEvent={props.onAddOrRemoveDate}
       eventPropGetter={eventStyleGetter}
     />
-    <button onClick={props.onSave}>Save Dates</button>
   </div>
 );
 
 Calendar.propTypes = {
+  awayOverMax: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.bool, PropTypes.number]))
+    .isRequired,
   datesAway: PropTypes.arrayOf(
     PropTypes.shape({
       allDay: PropTypes.bool.isRequired,
@@ -48,8 +68,10 @@ Calendar.propTypes = {
       title: PropTypes.string.isRequired
     })
   ).isRequired,
+  maxDays: PropTypes.number.isRequired,
   onAddOrRemoveDate: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired
+  onSave: PropTypes.func.isRequired,
+  timePeriod: PropTypes.number.isRequired
 };
 
 export default Calendar;
