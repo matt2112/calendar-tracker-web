@@ -13,7 +13,7 @@ const eventStyleGetter = (event) => {
   let style;
   if (event.title === ABROAD) {
     style = {
-      backgroundColor: 'red'
+      backgroundColor: 'rgb(145, 46, 46)'
     };
   }
   return { style };

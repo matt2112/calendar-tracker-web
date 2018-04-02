@@ -95,7 +95,7 @@ class Table extends Component<Props, State> {
             >
               Download Data
             </CSVLink>
-            <p>(if using an AdBlocker, right click link above and choose Save Link As...)</p>
+            <p>(if using an Ad Blocker, right click link above and choose Save Link As...)</p>
           </Fragment>
         )}
         <AutoSizer>

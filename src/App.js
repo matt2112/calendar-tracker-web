@@ -104,7 +104,7 @@ class App extends Component<Props, State> {
       firebase.auth.EmailAuthProvider.PROVIDER_ID,
       firebase.auth.GoogleAuthProvider.PROVIDER_ID
     ],
-    signInSuccessUrl: '/calendar'
+    signInSuccessUrl: '/'
   };
 
   changeOptionValue = (name: string, value: string) => {
@@ -255,13 +255,11 @@ class App extends Component<Props, State> {
         )}
         {this.state.loggedIn && (
           <Fragment>
-            <div id="welcome">
-              <NavBar />
-              <h2>Welcome {firebase.auth().currentUser.displayName}!</h2>
-            </div>
+            <NavBar />
             <Switch>
               <Route
-                path="/calendar"
+                exact
+                path="/"
                 render={() => (
                   <Fragment>
                     <Calendar

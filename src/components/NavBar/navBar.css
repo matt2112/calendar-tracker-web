@@ -2,15 +2,15 @@
   display: flex;
   justify-content: space-between;
   align-items: stretch;
-  background-color: red;
+  background-color: rgb(145, 46, 46);
   height: 50px;
+  border-bottom: 1px solid #000;
 }
 
 .left {
   display: flex;
   align-items: stretch;
-  width: 30%;
-  justify-content: space-around;
+  justify-content: flex-start;
 }
 
 .right {
@@ -19,14 +19,30 @@
 }
 
 .link {
-  background-color: green;
-  padding: 5px;
+  background-color: rgb(145, 46, 46);
+  padding: 20px;
   display: flex;
   align-items: center;
   color: #fff;
   text-decoration: none;
 }
 
+.link:hover {
+  cursor: pointer;
+}
+
 .active {
-  background-color: blue;
+  background-color: rgb(53, 117, 171);
+}
+
+#signOut {
+  position: absolute;
+  /* Account for height and border of navBar */
+  top: 51px;
+  right: 0;
+  height: 50px;
+  box-sizing: border-box;
+  border: 1px solid #000;
+  border-top: none;
+  border-right: none;
 }
