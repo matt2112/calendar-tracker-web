@@ -26,6 +26,12 @@ const Calendar = props => (
       <button id="saveDates" onClick={props.onSave}>
         Save Dates
       </button>
+      <button id="saveDates" onClick={props.onBackOneYear}>
+        Back a year
+      </button>
+      <button id="saveDates" onClick={props.onForwardOneYear}>
+        Forward a year
+      </button>
     </div>
     <div id="result">
       {props.awayOverMax[0] && (
@@ -47,11 +53,13 @@ const Calendar = props => (
       views={['month']}
       step={60}
       // React Big Calendar can't seem to process dates as moment objects.
-      defaultDate={new Date()}
+      // defaultDate={new Date()}
       selectable
       onSelectSlot={props.onAddOrRemoveDate}
       onSelectEvent={props.onAddOrRemoveDate}
       eventPropGetter={eventStyleGetter}
+      date={props.currentDate}
+      onNavigate={date => props.onNavigate(date)}
     />
   </div>
 );
@@ -59,6 +67,7 @@ const Calendar = props => (
 Calendar.propTypes = {
   awayOverMax: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.bool, PropTypes.number]))
     .isRequired,
+  currentDate: PropTypes.object.isRequired,
   datesAway: PropTypes.arrayOf(
     PropTypes.shape({
       allDay: PropTypes.bool.isRequired,
@@ -70,6 +79,7 @@ Calendar.propTypes = {
   ).isRequired,
   maxDays: PropTypes.number.isRequired,
   onAddOrRemoveDate: PropTypes.func.isRequired,
+  onNavigate: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   timePeriod: PropTypes.number.isRequired
 };

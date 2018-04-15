@@ -17,6 +17,7 @@ import { ABROAD, TRAVELLING } from './constants';
 type Props = {};
 type State = {
   awayOverMax: [boolean, number],
+  currentDate: Date,
   datesAway: Array<{
     allDay: boolean,
     end: Date,
@@ -36,6 +37,7 @@ type State = {
 class App extends Component<Props, State> {
   state = {
     awayOverMax: [false, 0],
+    currentDate: new Date(),
     datesAway: [],
     loggedIn: false,
     options: {
@@ -207,6 +209,19 @@ class App extends Component<Props, State> {
     );
   };
 
+  changeCurrentDate = (date: Date) => {
+    this.setState({
+      currentDate: date
+    });
+  };
+
+  changeYear = (increment: number) => {
+    const newDate = new Date(this.state.currentDate);
+    const year = newDate.getFullYear();
+    newDate.setFullYear(year + increment);
+    this.changeCurrentDate(newDate);
+  };
+
   saveOptions = () => {
     const userId = firebase.auth().currentUser.uid;
     const { options } = this.state;
@@ -263,10 +278,14 @@ class App extends Component<Props, State> {
                   render={() => (
                     <Calendar
                       awayOverMax={this.state.awayOverMax}
+                      currentDate={this.state.currentDate}
                       datesAway={this.state.datesAway}
                       endDate={endDate}
                       maxDays={maxDays}
                       onAddOrRemoveDate={this.addOrRemoveDate}
+                      onBackOneYear={() => this.changeYear(-1)}
+                      onForwardOneYear={() => this.changeYear(1)}
+                      onNavigate={this.changeCurrentDate}
                       onSave={this.saveDates}
                       startDate={startDate}
                       timePeriod={timePeriod}
