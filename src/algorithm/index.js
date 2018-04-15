@@ -1,6 +1,6 @@
 // @flow
 
-import { type Moment } from 'moment';
+import type Moment from 'moment';
 
 // Number of milliseconds in one day.
 const ONE_DAY = 86400000;

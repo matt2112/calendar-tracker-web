@@ -2,7 +2,7 @@
 
 import React, { Component, Fragment } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import moment, { type Moment } from 'moment';
+import moment from 'moment';
 import FirebaseAuth from 'react-firebaseui/FirebaseAuth';
 
 import firebase from './firebaseConfig';
@@ -29,8 +29,8 @@ type State = {
   options: {
     maxDays: number,
     timePeriod: number,
-    startDate: Moment,
-    endDate: Moment
+    startDate: moment,
+    endDate: moment
   }
 };
 
@@ -150,10 +150,16 @@ class App extends Component<Props, State> {
     );
   };
 
-  addOrRemoveDate = (dateInfo: { slots: Array<Moment>, start: Moment }) => {
+  addOrRemoveDate = (dateInfo: { slots: Array<Date>, start: Date }): void => {
     const newDatesAway = [...this.state.datesAway];
     const indicesToSplice = [];
-    const datesToAdd = [];
+    const datesToAdd: Array<{
+      id: number,
+      title: string,
+      allDay: boolean,
+      start: Date,
+      end: Date
+    }> = [];
     if (dateInfo.slots) {
       dateInfo.slots.forEach((date) => {
         const existingDateIdx = this.state.datesAway.findIndex(
@@ -280,7 +286,6 @@ class App extends Component<Props, State> {
                       awayOverMax={this.state.awayOverMax}
                       currentDate={this.state.currentDate}
                       datesAway={this.state.datesAway}
-                      endDate={endDate}
                       maxDays={maxDays}
                       onAddOrRemoveDate={this.addOrRemoveDate}
                       onBackOneYear={() => this.changeYear(-1)}

@@ -1,5 +1,6 @@
+// @flow
+
 import React from 'react';
-import PropTypes from 'prop-types';
 import BigCalendar from 'react-big-calendar';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
@@ -11,7 +12,7 @@ import { ABROAD, TRAVELLING } from '../../constants';
 
 BigCalendar.momentLocalizer(moment);
 
-const eventStyleGetter = (event) => {
+const eventStyleGetter = (event: { title: string }) => {
   let style;
   if (event.title === ABROAD) {
     style = {
@@ -39,7 +40,26 @@ const highlightDates = (datesAway) => {
   ];
 };
 
-const Calendar = props => (
+type Props = {
+  awayOverMax: [boolean, number],
+  currentDate: Date,
+  datesAway: Array<{
+    allDay: boolean,
+    end: Date,
+    id: number,
+    start: Date,
+    title: string
+  }>,
+  maxDays: number,
+  onAddOrRemoveDate: ({ slots: Array<Date>, start: Date }) => void,
+  onBackOneYear: () => void,
+  onForwardOneYear: () => void,
+  onNavigate: Date => void,
+  onSave: () => void,
+  timePeriod: number
+};
+
+const Calendar = (props: Props) => (
   <div id="calendar">
     <div id="top">
       <h2 className="sub-heading">Dates Away</h2>
@@ -78,36 +98,15 @@ const Calendar = props => (
       events={props.datesAway}
       views={['month']}
       step={60}
-      // React Big Calendar can't seem to process dates as moment objects.
-      // defaultDate={new Date()}
       selectable
       onSelectSlot={props.onAddOrRemoveDate}
       onSelectEvent={props.onAddOrRemoveDate}
       eventPropGetter={eventStyleGetter}
+      // React Big Calendar can't seem to process dates as moment objects.
       date={props.currentDate}
       onNavigate={date => props.onNavigate(date)}
     />
   </div>
 );
-
-Calendar.propTypes = {
-  awayOverMax: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.bool, PropTypes.number]))
-    .isRequired,
-  currentDate: PropTypes.object.isRequired,
-  datesAway: PropTypes.arrayOf(
-    PropTypes.shape({
-      allDay: PropTypes.bool.isRequired,
-      end: PropTypes.object.isRequired,
-      id: PropTypes.number.isRequired,
-      start: PropTypes.object.isRequired,
-      title: PropTypes.string.isRequired
-    })
-  ).isRequired,
-  maxDays: PropTypes.number.isRequired,
-  onAddOrRemoveDate: PropTypes.func.isRequired,
-  onNavigate: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-  timePeriod: PropTypes.number.isRequired
-};
 
 export default Calendar;
