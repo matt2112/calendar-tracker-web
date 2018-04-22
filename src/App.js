@@ -4,6 +4,7 @@ import React, { Component, Fragment } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import moment from 'moment';
 import FirebaseAuth from 'react-firebaseui/FirebaseAuth';
+import uniqueId from 'lodash/uniqueId';
 
 import firebase from './firebaseConfig';
 import './app.css';
@@ -162,7 +163,7 @@ class App extends Component<Props, State> {
         );
         if (existingDateIdx === -1) {
           datesToAdd.push({
-            id: Math.random(),
+            id: uniqueId('date_'),
             title: ABROAD,
             allDay: true,
             start: date,
@@ -171,7 +172,7 @@ class App extends Component<Props, State> {
         } else if (this.state.datesAway[existingDateIdx].title === ABROAD) {
           indicesToSplice.push(existingDateIdx);
           datesToAdd.push({
-            id: Math.random(),
+            id: uniqueId('date_'),
             title: TRAVELLING,
             allDay: true,
             start: date,
@@ -188,7 +189,7 @@ class App extends Component<Props, State> {
       );
       if (dateInfo.title === ABROAD) {
         datesToAdd.push({
-          id: Math.random(),
+          id: uniqueId('date_'),
           title: TRAVELLING,
           allDay: true,
           start: dateInfo.start,
