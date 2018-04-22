@@ -142,12 +142,7 @@ class App extends Component<Props, State> {
       this.state.options.maxDays
     );
 
-    this.setState(
-      () => ({
-        awayOverMax
-      }),
-      () => {}
-    );
+    this.setState({ awayOverMax });
   };
 
   addOrRemoveDate = (dateInfo: { slots: Array<Date>, start: Date }): void => {
