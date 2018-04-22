@@ -5,7 +5,7 @@ import type Moment from 'moment';
 // Number of milliseconds in one day.
 const ONE_DAY = 86400000;
 
-const getStartIndex = (dates: Array<Date>, startDate: Moment): number => {
+export const getStartIndex = (dates: Array<Date>, startDate: Moment): number => {
   const startDateInMs = startDate.valueOf();
   const startIndex = dates.findIndex((date) => {
     const dateInMs = date.getTime();
@@ -14,7 +14,7 @@ const getStartIndex = (dates: Array<Date>, startDate: Moment): number => {
   return startIndex;
 };
 
-const getEndIndex = (dates: Array<Date>, endDate: Moment): number => {
+export const getEndIndex = (dates: Array<Date>, endDate: Moment): number => {
   const endDateInMs = endDate.valueOf();
   let endIndex = -1;
   for (let i = dates.length - 1; i >= 0; i -= 1) {
