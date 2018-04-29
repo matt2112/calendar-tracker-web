@@ -147,7 +147,6 @@ class App extends Component<Props, State> {
   };
 
   addOrRemoveDate = (dateInfo: { slots: Array<Date>, start: Date }): void => {
-    const newDatesAway = [...this.state.datesAway];
     const indicesToSplice = [];
     const datesToAdd: Array<{
       id: number,
@@ -199,7 +198,8 @@ class App extends Component<Props, State> {
       indicesToSplice.push(existingDateIdx);
     }
 
-    const updatedDates = newDatesAway.filter((val, idx) => indicesToSplice.indexOf(idx) === -1);
+    const updatedDates = this.state.datesAway
+      .filter((val, idx) => indicesToSplice.indexOf(idx) === -1);
 
     datesToAdd.forEach(date => updatedDates.push(date));
 

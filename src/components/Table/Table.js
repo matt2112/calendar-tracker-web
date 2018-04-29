@@ -60,18 +60,33 @@ class Table extends Component<Props, State> {
     let searchingForStart = true;
     const allDates = [];
     let nextDate;
-    sortedDates.forEach((date) => {
+    sortedDates.forEach((date, idx) => {
       if (searchingForStart && date.title === TRAVELLING) {
         nextDate = {
           departure: moment(date.start).format('DD/MM/YYYY'),
           return: '',
           away: 0
         };
-        searchingForStart = false;
+        // Allow for day trip out of UK and back.
+        if (sortedDates[idx + 1] && sortedDates[idx + 1].title === TRAVELLING) {
+          nextDate.return = moment(date.start).format('DD/MM/YYYY');
+          allDates.push(nextDate);
+        } else {
+          searchingForStart = false;
+        }
       } else if (!searchingForStart && date.title === TRAVELLING) {
         nextDate.return = moment(date.start).format('DD/MM/YYYY');
         allDates.push(nextDate);
-        searchingForStart = true;
+        // Allow for coming back to the UK for one day and then returning abroad the same day.
+        if (sortedDates[idx + 1] && sortedDates[idx + 1].title === ABROAD) {
+          nextDate = {
+            departure: moment(date.start).format('DD/MM/YYYY'),
+            return: '',
+            away: 0
+          };
+        } else {
+          searchingForStart = true;
+        }
       } else if (!searchingForStart && date.title === ABROAD) {
         nextDate.away += 1;
       }
